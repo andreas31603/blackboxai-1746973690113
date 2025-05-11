@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Deteksi Nyamuk - Smart Mosquito Detection</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-image {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                            url('https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <div class="hero-image min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                    Smart Mosquito Detection
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
+                    Sistem monitoring dan deteksi nyamuk berbasis AI untuk pencegahan penyakit yang lebih efektif
+                </p>
+                <a href="dashboard.html" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-black bg-white hover:bg-gray-100 transition duration-150">
+                    Lihat Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Fitur Utama</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Teknologi canggih untuk monitoring dan pencegahan penyakit yang ditularkan nyamuk
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                    <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400&h=300" alt="Deteksi Real-time" class="w-full h-48 object-cover rounded-lg mb-6">
+                    <div class="text-xl font-semibold text-gray-900 mb-2">Deteksi Real-time</div>
+                    <p class="text-gray-600">
+                        Monitoring keberadaan nyamuk secara real-time dengan sensor canggih dan teknologi AI
+                    </p>
+                </div>
+                <div class="feature-card bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                    <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=400&h=300" alt="Analisis Lingkungan" class="w-full h-48 object-cover rounded-lg mb-6">
+                    <div class="text-xl font-semibold text-gray-900 mb-2">Analisis Lingkungan</div>
+                    <p class="text-gray-600">
+                        Pengukuran suhu, kelembaban, dan faktor lingkungan lain yang mempengaruhi aktivitas nyamuk
+                    </p>
+                </div>
+                <div class="feature-card bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                    <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&q=80&w=400&h=300" alt="Prediksi AI" class="w-full h-48 object-cover rounded-lg mb-6">
+                    <div class="text-xl font-semibold text-gray-900 mb-2">Prediksi AI</div>
+                    <p class="text-gray-600">
+                        Prediksi risiko menggunakan machine learning berdasarkan data historis dan kondisi lingkungan
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disease Info Section -->
+    <section class="py-20 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Penyakit yang Ditularkan Nyamuk</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Kenali berbagai penyakit yang dapat ditularkan melalui gigitan nyamuk
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="feature-card bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400&h=200" alt="Demam Berdarah" class="w-full h-40 object-cover rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Demam Berdarah</h3>
+                    <p class="text-gray-600">Penyakit serius yang ditularkan oleh nyamuk Aedes aegypti</p>
+                </div>
+                <div class="feature-card bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=400&h=200" alt="Malaria" class="w-full h-40 object-cover rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Malaria</h3>
+                    <p class="text-gray-600">Infeksi yang disebabkan oleh parasit Plasmodium</p>
+                </div>
+                <div class="feature-card bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?auto=format&fit=crop&q=80&w=400&h=200" alt="Chikungunya" class="w-full h-40 object-cover rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Chikungunya</h3>
+                    <p class="text-gray-600">Penyakit virus yang menyebabkan demam dan nyeri sendi</p>
+                </div>
+                <div class="feature-card bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400&h=200" alt="Zika" class="w-full h-40 object-cover rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Zika</h3>
+                    <p class="text-gray-600">Virus yang dapat mempengaruhi perkembangan janin</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prevention Tips Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Tips Pencegahan</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Langkah-langkah penting untuk mencegah perkembangbiakan nyamuk
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                    <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400&h=200" alt="Lingkungan" class="w-full h-40 object-cover rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Lingkungan</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li>• Bersihkan genangan air secara rutin</li>
+                        <li>• Tutup tempat penampungan air</li>
+                        <li>• Buang sampah pada tempatnya</li>
+                    </ul>
+                </div>
+                <div class="feature-card bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                    <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=400&h=200" alt="Perlindungan Diri" class="w-full h-40 object-cover rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Perlindungan Diri</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li>• Gunakan kelambu saat tidur</li>
+                        <li>• Pakai lotion anti nyamuk</li>
+                        <li>• Kenakan pakaian lengan panjang</li>
+                    </ul>
+                </div>
+                <div class="feature-card bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                    <img src="https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?auto=format&fit=crop&q=80&w=400&h=200" alt="Monitoring" class="w-full h-40 object-cover rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Monitoring</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li>• Pantau kondisi lingkungan</li>
+                        <li>• Periksa tempat berkembang biak</li>
+                        <li>• Lakukan fogging jika perlu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-white mb-8">
+                Mulai Monitoring Sekarang
+            </h2>
+            <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+                Akses dashboard untuk melihat data real-time dan analisis prediktif
+            </p>
+            <a href="dashboard.html" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-black bg-white hover:bg-gray-100 transition duration-150">
+                Buka Dashboard
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold text-white mb-4">Smart Mosquito Detection</h2>
+                <p class="mb-6">Sistem Monitoring dan Deteksi Nyamuk Berbasis AI</p>
+                <p class="text-sm">© 2024 Smart Mosquito Detection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
