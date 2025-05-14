@@ -15,6 +15,20 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 const database = firebase.database();
 
+// Function to calculate average values for ML prediction
+function calculateAverages(data, filterFn = () => true) {
+    const filteredData = Object.values(data).filter(filterFn);
+    if (filteredData.length === 0) return null;
+
+    return {
+        avgTemp: filteredData.reduce((sum, d) => sum + d.temperature, 0) / filteredData.length,
+        avgHumidity: filteredData.reduce((sum, d) => sum + d.humidity, 0) / filteredData.length,
+        avgCO2: filteredData.reduce((sum, d) => sum + d.co2, 0) / filteredData.length,
+        avgSound: filteredData.reduce((sum, d) => sum + d.sound, 0) / filteredData.length,
+        detectionRate: filteredData.filter(d => d.status === 'ada').length / filteredData.length
+    };
+}
+
 // Function to load data from Firebase
 async function loadFirebaseData() {
     try {
@@ -69,7 +83,7 @@ async function loadFirebaseData() {
     }
 }
 
-// Function to update stats and ML prediction
+// Function to update stats and ML predictions
 function updateStats(data) {
     const today = new Date().setHours(0, 0, 0, 0);
     let todayCount = 0;
@@ -101,64 +115,43 @@ function updateStats(data) {
                 }, 500);
             }
         });
-        
-        // Calculate ML prediction
-        const currentHour = new Date().getHours();
-        const mlResult = calculateMLPrediction(
-            latest.temperature,
-            latest.humidity,
-            latest.co2,
-            currentHour
-        );
-        
-        // Update ML prediction UI with smooth transitions
-        const mlProbability = document.getElementById('mlProbability');
-        const mlProbabilityText = document.getElementById('mlProbabilityText');
-        if (mlProbability && mlProbabilityText) {
-            const probabilityPercentage = `${Math.round(mlResult.probability * 100)}%`;
-            mlProbability.style.width = probabilityPercentage;
-            mlProbabilityText.textContent = probabilityPercentage;
+
+        // Calculate overall ML prediction
+        const overallStats = calculateAverages(data);
+        if (overallStats) {
+            const overallMlResult = calculateMLPrediction(
+                overallStats.avgTemp,
+                overallStats.avgHumidity,
+                overallStats.avgCO2,
+                new Date().getHours(),
+                overallStats.detectionRate
+            );
+
+            // Update overall ML prediction UI
+            updateMLPredictionUI(overallMlResult, 'overall');
         }
-        
-        // Update ML factor bars with animation
-        const factors = {
-            'mlTempBar': mlResult.factors.temperature,
-            'mlHumidityBar': mlResult.factors.humidity,
-            'mlAirBar': mlResult.factors.air,
-            'mlTimeBar': mlResult.factors.time
+
+        // Calculate today's ML prediction
+        const isToday = (timestamp) => {
+            const date = new Date(timestamp);
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
         };
 
-        Object.entries(factors).forEach(([id, value]) => {
-            const el = document.getElementById(id);
-            if (el) {
-                const percentage = `${Math.round(value * 100)}%`;
-                el.style.width = percentage;
-            }
-        });
-        
-        // Update factor percentages
-        Object.entries({
-            'mlTempFactor': mlResult.factors.temperature,
-            'mlHumidityFactor': mlResult.factors.humidity,
-            'mlAirFactor': mlResult.factors.air,
-            'mlTimeFactor': mlResult.factors.time
-        }).forEach(([id, value]) => {
-            const el = document.getElementById(id);
-            if (el) {
-                const percentage = `${Math.round(value * 100)}%`;
-                el.textContent = percentage;
-            }
-        });
-        
-        // Update detection status with animation
-        const status = latest.status === 'ada' ? 'Ada' : 'Tidak Ada';
-        const statusEl = document.getElementById('detectionStatus');
-        if (statusEl) {
-            statusEl.classList.add('animate-pulse');
-            setTimeout(() => {
-                statusEl.textContent = status;
-                statusEl.classList.remove('animate-pulse');
-            }, 500);
+        const todayStats = calculateAverages(data, d => isToday(d.timestamp));
+        if (todayStats) {
+            const todayMlResult = calculateMLPrediction(
+                todayStats.avgTemp,
+                todayStats.avgHumidity,
+                todayStats.avgCO2,
+                new Date().getHours(),
+                todayStats.detectionRate
+            );
+
+            // Update today's ML prediction UI
+            updateMLPredictionUI(todayMlResult, 'today');
         }
     }
     
@@ -183,6 +176,51 @@ function updateStats(data) {
             todayCountEl.textContent = todayCount;
             todayCountEl.classList.remove('animate-pulse');
         }, 500);
+    }
+}
+
+// Function to update ML prediction UI elements
+function updateMLPredictionUI(mlResult, type) {
+    const prefix = type === 'overall' ? 'overall' : 'today';
+    
+    // Update probability bar
+    const probabilityBar = document.getElementById(`${prefix}MlProbability`);
+    const probabilityText = document.getElementById(`${prefix}MlProbabilityText`);
+    if (probabilityBar && probabilityText) {
+        const probabilityPercentage = `${Math.round(mlResult.probability * 100)}%`;
+        probabilityBar.style.width = probabilityPercentage;
+        probabilityText.textContent = probabilityPercentage;
+    }
+
+    // Update factor bars
+    const factors = {
+        'Temp': mlResult.factors.temperature,
+        'Humidity': mlResult.factors.humidity,
+        'Air': mlResult.factors.air,
+        'Time': mlResult.factors.time
+    };
+
+    Object.entries(factors).forEach(([factor, value]) => {
+        const barEl = document.getElementById(`${prefix}Ml${factor}Bar`);
+        const textEl = document.getElementById(`${prefix}Ml${factor}Factor`);
+        if (barEl && textEl) {
+            const percentage = `${Math.round(value * 100)}%`;
+            barEl.style.width = percentage;
+            textEl.textContent = percentage;
+        }
+    });
+
+    // Update risk level
+    const riskEl = document.getElementById(`${prefix}RiskLevel`);
+    if (riskEl) {
+        const risk = mlResult.probability >= 0.7 ? 'Tinggi' :
+                    mlResult.probability >= 0.4 ? 'Sedang' : 'Rendah';
+        riskEl.textContent = risk;
+        riskEl.className = `text-lg font-semibold ${
+            risk === 'Tinggi' ? 'text-red-600' :
+            risk === 'Sedang' ? 'text-yellow-600' :
+            'text-green-600'
+        }`;
     }
 }
 
