@@ -48,7 +48,7 @@
             <!-- Total Deteksi Card -->
             <div class="stat-card bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-medium text-gray-500">Total Deteksi Tinggi Hari Ini</h3>
+                    <h3 class="text-sm font-medium text-gray-500">Total Deteksi Hari Ini</h3>
                     <span class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                         <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -56,7 +56,7 @@
                     </span>
                 </div>
                 <p class="text-3xl font-bold text-gray-900 animate-pulse" id="todayCount">-</p>
-                <p class="text-sm text-gray-600 mt-2">Dibandingkan kemarin</p>
+                <p class="text-sm text-gray-600 mt-2">Jumlah deteksi nyamuk</p>
             </div>
 
             <!-- Suhu Card -->
@@ -101,18 +101,143 @@
                 <p class="text-sm text-gray-600 mt-2">CO₂ Level</p>
             </div>
 
-            <!-- Status Deteksi Card -->
+            <!-- Level Suara Card -->
             <div class="stat-card bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-medium text-gray-500">Status Deteksi</h3>
-                    <span class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    <h3 class="text-sm font-medium text-gray-500">Level Suara</h3>
+                    <span class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.828-2.828"></path>
                         </svg>
                     </span>
                 </div>
-                <p class="text-3xl font-bold text-gray-900 animate-pulse" id="riskPrediction">-</p>
-                <p class="text-sm text-gray-600 mt-2">Berdasarkan Sensor</p>
+                <p class="text-3xl font-bold text-gray-900 animate-pulse" id="currentSound">- dB</p>
+                <p class="text-sm text-gray-600 mt-2">Update terakhir</p>
+            </div>
+        </div>
+
+        <!-- ML Prediction Cards -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Overall ML Analysis -->
+            <div class="chart-card bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <h2 class="text-lg font-semibold text-gray-900 mb-6">Analisis ML - Keseluruhan Data</h2>
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-sm font-medium text-gray-500">Probabilitas Kehadiran Nyamuk</h3>
+                            <span class="text-sm font-medium text-gray-900" id="overallMlProbabilityText">-%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                            <div class="bg-purple-600 h-2.5 rounded-full transition-all duration-500" id="overallMlProbability" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-4">Faktor-faktor</h3>
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">Suhu</span>
+                                    <span class="text-sm font-medium text-gray-900" id="overallMlTempFactor">-</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-red-500 h-1.5 rounded-full transition-all duration-500" id="overallMlTempBar"></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">Kelembapan</span>
+                                    <span class="text-sm font-medium text-gray-900" id="overallMlHumidityFactor">-</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-500" id="overallMlHumidityBar"></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">Kualitas Udara</span>
+                                    <span class="text-sm font-medium text-gray-900" id="overallMlAirFactor">-</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-green-500 h-1.5 rounded-full transition-all duration-500" id="overallMlAirBar"></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">Waktu</span>
+                                    <span class="text-sm font-medium text-gray-900" id="overallMlTimeFactor">-</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-purple-500 h-1.5 rounded-full transition-all duration-500" id="overallMlTimeBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Tingkat Risiko</h3>
+                        <p id="overallRiskLevel" class="text-lg font-semibold">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's ML Analysis -->
+            <div class="chart-card bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <h2 class="text-lg font-semibold text-gray-900 mb-6">Analisis ML - Hari Ini</h2>
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-sm font-medium text-gray-500">Probabilitas Kehadiran Nyamuk</h3>
+                            <span class="text-sm font-medium text-gray-900" id="todayMlProbabilityText">-%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                            <div class="bg-purple-600 h-2.5 rounded-full transition-all duration-500" id="todayMlProbability" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-4">Faktor-faktor</h3>
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">Suhu</span>
+                                    <span class="text-sm font-medium text-gray-900" id="todayMlTempFactor">-</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-red-500 h-1.5 rounded-full transition-all duration-500" id="todayMlTempBar"></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">Kelembapan</span>
+                                    <span class="text-sm font-medium text-gray-900" id="todayMlHumidityFactor">-</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-500" id="todayMlHumidityBar"></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">Kualitas Udara</span>
+                                    <span class="text-sm font-medium text-gray-900" id="todayMlAirFactor">-</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-green-500 h-1.5 rounded-full transition-all duration-500" id="todayMlAirBar"></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">Waktu</span>
+                                    <span class="text-sm font-medium text-gray-900" id="todayMlTimeFactor">-</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-purple-500 h-1.5 rounded-full transition-all duration-500" id="todayMlTimeBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Tingkat Risiko</h3>
+                        <p id="todayRiskLevel" class="text-lg font-semibold">-</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -124,7 +249,7 @@
                     <h2 class="text-lg font-semibold text-gray-900">Tren Deteksi 24 Jam Terakhir</h2>
                     <div class="flex items-center space-x-2">
                         <span class="w-3 h-3 rounded-full bg-gray-600"></span>
-                        <span class="text-sm text-gray-600">Jumlah Deteksi Tinggi</span>
+                        <span class="text-sm text-gray-600">Jumlah Deteksi</span>
                     </div>
                 </div>
                 <div class="chart-container">
