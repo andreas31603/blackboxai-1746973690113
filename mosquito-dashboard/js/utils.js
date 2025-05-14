@@ -7,55 +7,62 @@ function formatDate(date) {
 }
 
 // Function to calculate ML prediction
-function calculateMLPrediction(temp, humidity, co2, hour) {
-    // Enhanced ML model simulation based on typical mosquito behavior
+function calculateMLPrediction(temp, humidity, co2, hour, detectionRate = 0) {
+    // Enhanced ML model simulation based on typical mosquito behavior and historical data
     let probability = 0;
     
     // Temperature factor (optimal range 25-30°C)
     let tempFactor;
     if (temp >= 25 && temp <= 30) {
-        tempFactor = 0.3; // Optimal temperature range
+        tempFactor = 0.25; // Optimal temperature range
     } else if (temp >= 20 && temp < 25) {
-        tempFactor = 0.2; // Cool but acceptable
+        tempFactor = 0.15; // Cool but acceptable
     } else if (temp > 30 && temp <= 35) {
-        tempFactor = 0.2; // Warm but acceptable
+        tempFactor = 0.15; // Warm but acceptable
     } else {
-        tempFactor = 0.1; // Too cold or too hot
+        tempFactor = 0.05; // Too cold or too hot
     }
     
     // Humidity factor (higher humidity = higher probability)
     let humidityFactor;
     if (humidity >= 70 && humidity <= 85) {
-        humidityFactor = 0.3; // Optimal humidity range
+        humidityFactor = 0.25; // Optimal humidity range
     } else if (humidity > 85) {
-        humidityFactor = 0.25; // Very humid
+        humidityFactor = 0.2; // Very humid
     } else if (humidity >= 60 && humidity < 70) {
-        humidityFactor = 0.2; // Moderately humid
+        humidityFactor = 0.15; // Moderately humid
     } else {
-        humidityFactor = 0.1; // Too dry
+        humidityFactor = 0.05; // Too dry
     }
     
     // CO2 factor (higher CO2 = higher probability)
     let airFactor;
     if (co2 >= 500) {
-        airFactor = 0.25; // High CO2 levels attract mosquitoes
+        airFactor = 0.2; // High CO2 levels attract mosquitoes
     } else if (co2 >= 300) {
-        airFactor = 0.2; // Moderate CO2 levels
+        airFactor = 0.15; // Moderate CO2 levels
     } else {
-        airFactor = 0.1; // Low CO2 levels
+        airFactor = 0.05; // Low CO2 levels
     }
     
     // Time factor (more active at dawn and dusk)
     let timeFactor;
-    if (hour >= 17 || hour <= 7) {
-        timeFactor = 0.15; // Dawn and dusk hours
-    } else if (hour >= 8 && hour <= 16) {
-        timeFactor = 0.05; // Daytime hours
+    if ((hour >= 17 && hour <= 20) || (hour >= 4 && hour <= 7)) {
+        timeFactor = 0.15; // Dawn and dusk hours (peak activity)
+    } else if (hour >= 21 || hour <= 3) {
+        timeFactor = 0.1; // Night hours
     } else {
-        timeFactor = 0.1; // Other hours
+        timeFactor = 0.05; // Daytime hours
     }
+
+    // Historical detection rate factor
+    let detectionFactor = detectionRate * 0.15; // Max 15% influence from historical data
+
+    // Calculate final probability
+    probability = tempFactor + humidityFactor + airFactor + timeFactor + detectionFactor;
     
-    probability = tempFactor + humidityFactor + airFactor + timeFactor;
+    // Normalize probability to ensure it doesn't exceed 1
+    probability = Math.min(probability, 1);
     
     return {
         probability,
@@ -63,7 +70,8 @@ function calculateMLPrediction(temp, humidity, co2, hour) {
             temperature: tempFactor,
             humidity: humidityFactor,
             air: airFactor,
-            time: timeFactor
+            time: timeFactor,
+            detection: detectionFactor
         }
     };
 }
